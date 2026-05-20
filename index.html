@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Developed by Huxyn —  MCQ Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #060b1a;
+    --bg2: #0a1628;
+    --surface: rgba(10,20,50,0.7);
+    --border: rgba(0,200,255,0.25);
+    --neon: #00d4ff;
+    --neon2: #7b2fff;
+    --neon3: #ff2d78;
+    --text: #e8f4ff;
+    --text2: #8ab4d4;
+    --correct: #00ff88;
+    --wrong: #ff3355;
+    --card-bg: rgba(8,18,45,0.85);
+    --glow: 0 0 20px rgba(0,212,255,0.4);
+  }
+  
+  .light {
+    --bg: #f0f4ff;
+    --bg2: #e4ecff;
+    --surface: rgba(255,255,255,0.85);
+    --border: rgba(100,100,255,0.3);
+    --neon: #4f46e5;
+    --neon2: #7c3aed;
+    --neon3: #db2777;
+    --text: #1e1b4b;
+    --text2: #4c4f8a;
+    --correct: #059669;
+    --wrong: #dc2626;
+    --card-bg: rgba(255,255,255,0.9);
+    --glow: 0 4px 20px rgba(79,70,229,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    min-height: 100vh;
+    transition: all 0.4s ease;
+  }
+  body::before {
+    content:'';
+    position:fixed; inset:0; z-index:-1;
+    background: radial-gradient(ellipse at 20% 20%, rgba(123,47,255,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0,212,255,0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255,45,120,0.05) 0%, transparent 70%);
+    transition: all 0.4s;
+  }
+  .light body::before {
+    background: radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(79,70,229,0.06) 0%, transparent 50%);
+  }
+
+  /* NAVBAR */
+  nav {
+    position: sticky; top:0; z-index:100;
+    background: rgba(6,11,26,0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    display: flex; align-items:center; justify-content:space-between;
+    height:60px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    transition: background 0.4s;
+  }
+  .light nav { background: rgba(240,244,255,0.92); }
+  .brand {
+    font-family:'Orbitron', monospace;
+    font-size:1.1rem; font-weight:700;
+    background: linear-gradient(135deg, var(--neon), var(--neon2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    letter-spacing:1px;
+  }
+  .brand span { font-size:0.7rem; display:block; font-family:'Exo 2',sans-serif; color:var(--text2); font-weight:300; -webkit-text-fill-color:var(--text2); }
+  .nav-right { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .btn {
+    padding: 7px 14px; border:none; border-radius:8px; cursor:pointer;
+    font-family:'Exo 2',sans-serif; font-size:0.82rem; font-weight:600;
+    transition: all 0.25s; position:relative; overflow:hidden;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn::after {
+    content:''; position:absolute; inset:0;
+    background: rgba(255,255,255,0.15);
+    transform: scaleX(0); transform-origin:left;
+    transition: transform 0.3s;
+  }
+  .btn:hover::after { transform:scaleX(1); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--neon2), var(--neon));
+    color:#fff; box-shadow: 0 0 15px rgba(0,212,255,0.3);
+  }
+  .btn-secondary {
+    background: rgba(255,255,255,0.08); border:1px solid var(--border); color:var(--text);
+  }
+  .light .btn-secondary { background: rgba(0,0,0,0.07); }
+  .btn-danger { background:linear-gradient(135deg,#ff2d78,#7b2fff); color:#fff; }
+  .btn-theme { background:transparent; border:1px solid var(--border); color:var(--text); font-size:1.1rem; padding:6px 10px; }
+
+.wrong-filter-active {
+  background: linear-gradient(135deg, #ff2d78, #7b2fff) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 12px rgba(255,45,120,0.4);
+}
+
+
+
+  /* SCORE PANEL */
+  #score-panel {
+    display:flex; gap:15px; padding:15px 20px;
+    background: var(--surface);
+    border-bottom:1px solid var(--border);
+    align-items:center; flex-wrap:wrap;
+    backdrop-filter:blur(10px);
+  }
+  .stat {
+    display:flex; align-items:center; gap:8px;
+    background: rgba(0,212,255,0.08); border:1px solid var(--border);
+    border-radius:10px; padding:8px 14px;
+    font-size:0.85rem;
+  }
+  .stat-val {
+    font-family:'Orbitron',monospace; font-size:1rem; font-weight:700; color:var(--neon);
+  }
+  .stat-label { color:var(--text2); }
+  #progress-bar-wrap {
+    flex:1; min-width:160px;
+    background: rgba(255,255,255,0.08); border-radius:20px; height:10px;
+    border:1px solid var(--border); overflow:hidden;
+  }
+  #progress-bar {
+    height:100%; border-radius:20px;
+    background: linear-gradient(90deg, var(--neon2), var(--neon));
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px var(--neon);
+    width:0%;
+  }
+
+  /* CONTROLS */
+  #controls {
+    display:flex; gap:10px; padding:14px 20px;
+    flex-wrap:wrap; align-items:center;
+    background: var(--surface); border-bottom:1px solid var(--border);
+    backdrop-filter:blur(10px);
+  }
+  #search-bar {
+    flex:1; min-width:200px;
+    background: rgba(255,255,255,0.07); border:1px solid var(--border);
+    border-radius:10px; padding:9px 16px;
+    color:var(--text); font-family:'Exo 2',sans-serif; font-size:0.9rem;
+    outline:none; transition:all 0.3s;
+  }
+  .light #search-bar { background:rgba(0,0,0,0.05); }
+  #search-bar:focus { border-color:var(--neon); box-shadow:0 0 12px rgba(0,212,255,0.2); }
+  #search-bar::placeholder { color:var(--text2); }
+
+  /* LOADING */
+  #loading {
+    position:fixed; inset:0; z-index:999;
+    background:var(--bg);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;
+  }
+  .loader-ring {
+    width:80px; height:80px; border-radius:50%;
+    border:3px solid rgba(0,212,255,0.1);
+    border-top:3px solid var(--neon);
+    border-right:3px solid var(--neon2);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .loader-text { font-family:'Orbitron',monospace; color:var(--neon); animation:pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+  /* QUIZ GRID */
+  #quiz-container {
+    max-width:1100px; margin:0 auto; padding:20px;
+  }
+  #no-results {
+    display:none; text-align:center; padding:60px 20px; color:var(--text2);
+    font-size:1.2rem;
+  }
+
+  .mcq-card {
+    background: var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:16px; padding:22px;
+    margin-bottom:18px;
+    backdrop-filter:blur(15px);
+    box-shadow: var(--glow), 0 4px 20px rgba(0,0,0,0.3);
+    transition: all 0.4s ease;
+    animation: cardIn 0.5s ease both;
+    position:relative; overflow:hidden;
+  }
+  .mcq-card::before {
+    content:''; position:absolute;
+    top:-50%; left:-50%; width:200%; height:200%;
+    background: radial-gradient(circle, rgba(0,212,255,0.03) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform:translateY(20px) scale(0.97); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+  .mcq-card:hover { border-color:rgba(0,212,255,0.4); transform:translateY(-2px); }
+
+  .q-num {
+    font-family:'Orbitron',monospace; font-size:0.7rem; font-weight:700;
+    color:var(--neon); margin-bottom:8px; letter-spacing:2px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .q-num::after { content:''; flex:1; height:1px; background:var(--border); }
+  .q-text {
+    font-size:0.97rem; font-weight:600; color:var(--text);
+    line-height:1.6; margin-bottom:14px;
+  }
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .opt {
+    display:flex; align-items:center; gap:12px;
+    padding:10px 14px; border-radius:10px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,0.04);
+    cursor:pointer; transition:all 0.25s; font-size:0.88rem;
+    position:relative; overflow:hidden;
+    user-select:none;
+  }
+  .light .opt { background:rgba(0,0,0,0.04); }
+  .opt:hover:not(.disabled) {
+    border-color:var(--neon); background:rgba(0,212,255,0.08);
+    transform:translateX(4px);
+  }
+  .opt-letter {
+    width:28px; height:28px; border-radius:50%;
+    border:1.5px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Orbitron',monospace; font-size:0.75rem; font-weight:700;
+    flex-shrink:0; transition:all 0.3s; color:var(--neon);
+  }
+  .opt-text { flex:1; line-height:1.5; }
+  .opt.correct {
+    border-color:var(--correct); background:rgba(0,255,136,0.12);
+    animation:correctPulse 0.4s ease;
+  }
+  .opt.correct .opt-letter {
+    background:var(--correct); color:#000; border-color:var(--correct);
+  }
+  .opt.wrong {
+    border-color:var(--wrong); background:rgba(255,51,85,0.12);
+    animation:shake 0.4s ease;
+  }
+  .opt.wrong .opt-letter {
+    background:var(--wrong); color:#fff; border-color:var(--wrong);
+  }
+  .opt.disabled { cursor:not-allowed; }
+  .opt-icon { font-size:1rem; }
+
+  @keyframes correctPulse {
+    0%{transform:scale(1)} 50%{transform:scale(1.02)} 100%{transform:scale(1)}
+  }
+  @keyframes shake {
+    0%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)}
+    60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} 100%{transform:translateX(0)}
+  }
+
+  .card-footer {
+    margin-top:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+  .reveal-btn {
+    font-size:0.78rem; padding:5px 12px;
+    background:rgba(123,47,255,0.15); border:1px solid rgba(123,47,255,0.4);
+    color:#b98eff; border-radius:8px; cursor:pointer;
+    transition:all 0.2s; font-family:'Exo 2',sans-serif;
+  }
+  .reveal-btn:hover { background:rgba(123,47,255,0.25); }
+  .answer-reveal {
+    display:none; margin-top:10px; padding:10px 14px;
+    background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.3);
+    border-radius:10px; font-size:0.85rem; color:var(--correct);
+    animation:fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+
+  /* CELEBRATION */
+  #celebration {
+    position:fixed; inset:0; pointer-events:none; z-index:500;
+    display:none;
+  }
+  .confetti-piece {
+    position:absolute; width:10px; height:10px; border-radius:2px;
+    animation:confettiFall 1.5s ease-in forwards;
+  }
+  @keyframes confettiFall {
+    0%   {transform:translateY(-20px) rotate(0deg); opacity:1;}
+    100% {transform:translateY(100vh) rotate(720deg); opacity:0;}
+  }
+  .emoji-burst {
+    position:fixed; pointer-events:none; z-index:501;
+    font-size:2.5rem; animation:emojiBurst 1.2s ease forwards;
+  }
+  @keyframes emojiBurst {
+    0%   {transform:scale(0) translateY(0); opacity:1;}
+    50%  {transform:scale(1.5) translateY(-60px); opacity:1;}
+    100% {transform:scale(0.5) translateY(-120px); opacity:0;}
+  }
+
+  /* CHEATSHEET */
+  #cheatsheet {
+    max-width:1100px; margin:30px auto; padding:0 20px 40px;
+    display:none;
+  }
+  #cheatsheet h2 {
+    font-family:'Orbitron',monospace; font-size:1.4rem; color:var(--neon);
+    margin-bottom:20px; text-align:center;
+    text-shadow:0 0 20px rgba(0,212,255,0.5);
+  }
+  #cheatsheet table {
+    width:100%; border-collapse:collapse;
+    background:var(--card-bg); border-radius:16px; overflow:hidden;
+    box-shadow:var(--glow); font-size:0.83rem;
+  }
+  #cheatsheet th {
+    background:linear-gradient(135deg,var(--neon2),var(--neon));
+    color:#fff; padding:12px 16px; text-align:left;
+    font-family:'Orbitron',monospace; font-size:0.75rem; letter-spacing:1px;
+  }
+  #cheatsheet td {
+    padding:10px 16px; border-bottom:1px solid var(--border);
+    color:var(--text); vertical-align:top;
+  }
+  #cheatsheet tr:hover td { background:rgba(0,212,255,0.05); }
+  #cheatsheet td:first-child { color:var(--neon); font-weight:600; white-space:nowrap; }
+  #cheatsheet td:nth-child(2) { color:var(--neon2); font-weight:600; white-space:nowrap; }
+
+  /* TABS */
+  .tab-bar {
+    display:flex; gap:10px; padding:15px 20px;
+    max-width:1100px; margin:0 auto;
+  }
+  .tab {
+    padding:8px 18px; border-radius:10px; cursor:pointer;
+    font-family:'Orbitron',monospace; font-size:0.72rem; letter-spacing:1px;
+    border:1px solid var(--border); background:transparent; color:var(--text2);
+    transition:all 0.25s;
+  }
+  .tab.active {
+    background:linear-gradient(135deg,var(--neon2),var(--neon));
+    color:#fff; border-color:transparent;
+    box-shadow:0 0 15px rgba(0,212,255,0.3);
+  }
+
+  /* RESPONSIVE */
+  @media(max-width:600px) {
+    nav { padding:0 12px; }
+    .brand { font-size:0.85rem; }
+    .btn { padding:6px 10px; font-size:0.75rem; }
+    #quiz-container { padding:12px; }
+    .mcq-card { padding:16px; }
+    .q-text { font-size:0.9rem; }
+    .opt { font-size:0.83rem; }
+    #score-panel { padding:10px 12px; gap:8px; }
+    .stat { padding:6px 10px; font-size:0.78rem; }
+  }
+
+  .results-summary {
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:16px; padding:30px; text-align:center;
+    margin-bottom:20px; box-shadow:var(--glow);
+  }
+  .results-summary h3 {
+    font-family:'Orbitron',monospace; color:var(--neon); margin-bottom:10px;
+  }
+  .big-score {
+    font-family:'Orbitron',monospace; font-size:3rem; font-weight:900;
+    background:linear-gradient(135deg,var(--neon),var(--neon2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .filtered-count {
+    font-size:0.78rem; color:var(--text2); margin-left:auto;
+    padding:4px 10px; background:rgba(255,255,255,0.05); border-radius:6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="loader-ring"></div>
+  <div class="loader-text">⚡ INITIALIZING QUIZ SYSTEM...</div>
+  <div style="color:var(--text2);font-size:0.8rem;">Loading MCQs</div>
+</div>
+
+<!-- CELEBRATION LAYER -->
+<div id="celebration"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="brand">
+    Developed by Huxyn
+    <span>DM QUIZ MASTER</span>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-primary" onclick="shuffleQuiz()">🔀 Shuffle</button>
+    <button class="btn btn-danger" onclick="resetQuiz()">↺ Reset</button>
+    <button class="btn btn-secondary" id="toggleAnswersBtn" onclick="toggleAllAnswers()">🔍 Show All Answers</button>
+    <button class="btn btn-secondary" id="wrongFilterBtn" onclick="toggleWrongFilter()">❌ Wrong</button>
+    <button class="btn btn-theme" id="theme-btn" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
+  </div>
+</nav>
+
+<!-- SCORE PANEL -->
+<div id="score-panel">
+  <div class="stat"><span class="stat-val" id="s-total">0</span><span class="stat-label">Answered</span></div>
+  <div class="stat"><span class="stat-val" id="s-correct" style="color:var(--correct)">0</span><span class="stat-label">✓ Correct</span></div>
+  <div class="stat"><span class="stat-val" id="s-wrong" style="color:var(--wrong)">0</span><span class="stat-label">✗ Wrong</span></div>
+  <div class="stat"><span class="stat-val" id="s-pct">0%</span><span class="stat-label">Score</span></div>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+  <span class="filtered-count" id="filter-count">360 / 360 </span>
+</div>
+
+<!-- CONTROLS -->
+<div id="controls">
+  <input type="text" id="search-bar" placeholder="🔍 Search questions..." oninput="filterMCQs(this.value)">
+  <button class="btn btn-secondary" onclick="toggleCheatsheet()">📋 Cheatsheet</button>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('quiz')">📝 Quiz</button>
+  <button class="tab" onclick="switchTab('cheatsheet')">📊 Summary</button>
+</div>
+
+<!-- QUIZ CONTAINER -->
+<div id="quiz-container"></div>
+
+<!-- NO RESULTS -->
+<div id="no-results">😕 No questions match your search. Try different keywords.</div>
+
+<!-- CHEATSHEET -->
+<div id="cheatsheet">
+  <h2>📖 Techno Cheatsheet</h2>
+/*  
+<div style="overflow-x: auto;">
+    <table>
+      <thead>
+        <tr><th>Category</th><th>Term / Acronym</th><th>Definition</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>📊 Metrics</td><td>CTR</td><td>Click-Through Rate = Clicks / Impressions → measures ad engagement.</td></tr>
+        <tr><td>📊 Metrics</td><td>CPC</td><td>Cost Per Click – amount paid for each click on an ad.</td></tr>
+        <tr><td>📊 Metrics</td><td>CPM</td><td>Cost Per Mille (1000 impressions) – common for awareness campaigns.</td></tr>
+        <tr><td>📊 Metrics</td><td>CPA</td><td>Cost Per Action / Acquisition – cost per conversion (purchase, lead).</td></tr>
+        <tr><td>📊 Metrics</td><td>CPL</td><td>Cost Per Lead – efficiency of lead generation.</td></tr>
+        <tr><td>📊 Metrics</td><td>ROAS</td><td>Return on Ad Spend = Revenue / Ad Spend → profitability metric.</td></tr>
+        <tr><td>📊 Metrics</td><td>ROI</td><td>Return on Investment = (Gain – Cost)/Cost → overall profitability.</td></tr>
+        <tr><td>📊 Metrics</td><td>LTV</td><td>Lifetime Value – total revenue from a customer over time.</td></tr>
+        <tr><td>🎯 Funnels</td><td>TOFU</td><td>Top of Funnel – create awareness among cold audiences.</td></tr>
+        <tr><td>🎯 Funnels</td><td>MOFU</td><td>Middle of Funnel – educate, nurture leads, build trust.</td></tr>
+        <tr><td>🎯 Funnels</td><td>BOFU</td><td>Bottom of Funnel – convert leads into customers (purchase intent).</td></tr>
+        <tr><td>🎯 Funnels</td><td>Conversion Rate</td><td>% of users completing desired action (purchase, signup).</td></tr>
+        <tr><td>🎯 Funnels</td><td>Lead Magnet</td><td>Valuable offer (e‑book, discount) to capture user info.</td></tr>
+        <tr><td>🎯 Funnels</td><td>Funnel Leakage</td><td>Loss of users between stages – identifies drop‑off points.</td></tr>
+        <tr><td>📱 Meta Ads</td><td>Meta Pixel</td><td>Tracking code for website actions & conversions.</td></tr>
+        <tr><td>📱 Meta Ads</td><td>Advantage+ Placements</td><td>AI‑optimised ad placements across Meta networks.</td></tr>
+        <tr><td>📱 Meta Ads</td><td>Lookalike Audience</td><td>Find users similar to existing customers (from source audience).</td></tr>
+        <tr><td>📱 Meta Ads</td><td>Retargeting Audience</td><td>Users who previously interacted → highest conversion rates.</td></tr>
+        <tr><td>📱 Meta Ads</td><td>Campaign Budget Optimisation</td><td>Auto‑distributes budget across ad sets at campaign level.</td></tr>
+        <tr><td>📱 Meta Ads</td><td>Conversion API (CAPI)</td><td>Server‑side tracking, more reliable and privacy‑safe.</td></tr>
+        <tr><td>📱 Meta Ads</td><td>Ad Fatigue</td><td>Declining CTR + high frequency → audience overexposure.</td></tr>
+        <tr><td>🔎 Google Ads</td><td>Quality Score</td><td>Google’s rating of ad relevance, CTR, landing page experience.</td></tr>
+        <tr><td>🔎 Google Ads</td><td>Ad Rank</td><td>Bid × Quality Score – determines ad auction position.</td></tr>
+        <tr><td>🔎 Google Ads</td><td>Keyword Match Types</td><td>Broad (widest), Phrase, Exact (most control).</td></tr>
+        <tr><td>🔎 Google Ads</td><td>Negative Keywords</td><td>Prevent ads from showing on irrelevant searches.</td></tr>
+        <tr><td>🔎 Google Ads</td><td>Smart Bidding</td><td>AI‑powered strategies (Target CPA, Maximise Conversions, Target ROAS).</td></tr>
+        <tr><td>🔎 Google Ads</td><td>Responsive Search Ads</td><td>Auto‑tests headlines/descriptions to optimise performance.</td></tr>
+        <tr><td>📈 Google Analytics 4</td><td>GA4</td><td>Event‑based tracking for websites & apps.</td></tr>
+        <tr><td>📈 Google Analytics 4</td><td>Event</td><td>User interaction (page_view, scroll, click, purchase).</td></tr>
+        <tr><td>📈 Google Analytics 4</td><td>Bounce Rate</td><td>Single‑page session with no interaction.</td></tr>
+        <tr><td>📈 Google Analytics 4</td><td>Engagement Rate</td><td>% of engaged sessions (>10s, conversion, or ≥2 pages).</td></tr>
+        <tr><td>📈 Google Analytics 4</td><td>UTM Parameters</td><td>Tags added to URLs to track campaign source, medium, name.</td></tr>
+        <tr><td>📈 Google Analytics 4</td><td>Attribution (Linear)</td><td>Equal credit to all touchpoints in conversion path.</td></tr>
+        <tr><td>💼 LinkedIn</td><td>Purpose</td><td>Professional networking, B2B marketing, recruiting.</td></tr>
+        <tr><td>💼 LinkedIn</td><td>Sales Navigator</td><td>Advanced sales prospecting & lead targeting tool.</td></tr>
+        <tr><td>💼 LinkedIn</td><td>LinkedIn Recruiter</td><td>Tool for recruiters to find and contact candidates.</td></tr>
+        <tr><td>💼 LinkedIn</td><td>Creator Mode</td><td>Enhances content creation & audience growth features.</td></tr>
+        <tr><td>💬 WhatsApp Business</td><td>Business Profile</td><td>Display company info, hours, website, email.</td></tr>
+        <tr><td>💬 WhatsApp Business</td><td>Quick Replies</td><td>Save & reuse frequent responses for faster support.</td></tr>
+        <tr><td>💬 WhatsApp Business</td><td>Catalog</td><td>Showcase products/prices inside the chat.</td></tr>
+        <tr><td>💬 WhatsApp Business</td><td>Broadcast List</td><td>Send one message individually to many contacts.</td></tr>
+        <tr><td>💬 WhatsApp Business</td><td>Click‑to‑WhatsApp Ads</td><td>Ads that start a conversation directly on WhatsApp.</td></tr>
+        <tr><td>⚙️ General</td><td>KPI</td><td>Key Performance Indicator – measurable value to track success.</td></tr>
+        <tr><td>⚙️ General</td><td>Landing Page</td><td>Dedicated page designed for conversions (lead capture or purchase).</td></tr>
+        <tr><td>⚙️ General</td><td>A/B Testing</td><td>Compare two versions to determine better performance.</td></tr>
+        <tr><td>⚙️ General</td><td>First‑Party Data</td><td>Data collected directly from users (CRM, website) – high reliability.</td></tr>
+        <tr><td>⚙️ General</td><td>Social Proof</td><td>Testimonials, reviews, case studies → increase trust & conversions.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <footer style="margin-top:1.5rem; text-align:center; font-size:0.75rem; color:var(--text2);">
+    📌 Based on 572 MCQs – covers Meta Ads, Google Ads, GA4, LinkedIn, WhatsApp Business & Sales Funnels
+  </footer>
+</div>
+*/
+<script>
+const ALL_MCQS = [
+  {"q": "A company advertises a new product on TV to attract customers. This activity is called:", "a": "Accounting", "b": "Marketing", "c": "Auditing", "d": "Staffing", "e": "Financing", "ans": "B"},
+  {"q": "Ali buys a burger from a restaurant. Ali is the:", "a": "Supplier", "b": "Customer", "c": "Competitor", "d": "Investor", "e": "Retailer", "ans": "B"},
+  {"q": "Sara drinks juice bought by her mother. Sara is the:", "a": "Seller", "b": "Consumer", "c": "Wholesaler", "d": "Producer", "e": "Manager", "ans": "B"},
+  {"q": "A thirsty student buys water after football practice. This is an example of:", "a": "Need", "b": "Promotion", "c": "Branding", "d": "Distribution", "e": "Forecasting", "ans": "A"},
+  {"q": "Ahmed wants a luxury sports car because he likes its style. This is a:", "a": "Need", "b": "Want", "c": "Supply", "d": "Cost", "e": "Product", "ans": "B"},
+  {"q": "A person buys a mobile phone using salary income. This is:", "a": "Need", "b": "Want", "c": "Demand", "d": "Supply", "e": "Promotion", "ans": "C"},
+  {"q": "A company studies its strengths and weaknesses before expansion. This is called:", "a": "KPI", "b": "SWOT", "c": "SEO", "d": "ROI", "e": "RACE", "ans": "B"},
+  {"q": "A business decides product design, price, and promotion. This is known as:", "a": "Marketing Mix", "b": "Segmentation", "c": "Branding", "d": "Forecasting", "e": "Positioning", "ans": "A"},
+  {"q": "A company divides customers according to age groups. This is:", "a": "Pricing", "b": "Segmentation", "c": "Distribution", "d": "Auditing", "e": "Forecasting", "ans": "B"},
+  {"q": "A company sells school bags only to students. Students are the:", "a": "Competitors", "b": "Target Market", "c": "Collaborators", "d": "Suppliers", "e": "Employees", "ans": "B"},
+  {"q": "A company estimates total market demand for laptops. This is:", "a": "SAM", "b": "SOM", "c": "TAM", "d": "KPI", "e": "CRM", "ans": "C"},
+  {"q": "A business studies rival prices before launching product. This is:", "a": "Customer Analysis", "b": "Competitor Analysis", "c": "HR Analysis", "d": "Product Analysis", "e": "Financial Analysis", "ans": "B"},
+  {"q": "A company offers the lowest prices in the market. This strategy is:", "a": "Differentiation", "b": "Cost Leadership", "c": "Branding", "d": "Promotion", "e": "Positioning", "ans": "B"},
+  {"q": "A perfume company offers customized fragrances. This is:", "a": "Cost Leadership", "b": "Differentiation", "c": "Forecasting", "d": "Positioning", "e": "Segmentation", "ans": "B"},
+  {"q": "A company studies economic conditions and technology changes. This is:", "a": "Context Analysis", "b": "Pricing Strategy", "c": "Product Planning", "d": "Recruitment", "e": "Distribution", "ans": "A"},
+  {"q": "A business works closely with suppliers and distributors. These groups are called:", "a": "Customers", "b": "Collaborators", "c": "Competitors", "d": "Investors", "e": "Managers", "ans": "B"},
+  {"q": "A company studies industry competition using a framework. This framework is:", "a": "SWOT", "b": "Porter's Five Forces", "c": "KPI", "d": "AIDA", "e": "RACE", "ans": "B"},
+  {"q": "A company creates value for customers to earn profit. This is called:", "a": "Marketing", "b": "Manufacturing", "c": "Financing", "d": "Staffing", "e": "Forecasting", "ans": "A"},
+  {"q": "A customer compares two mobile brands before buying. This stage is:", "a": "Purchase Decision", "b": "Evaluation of Alternatives", "c": "Problem Recognition", "d": "Distribution", "e": "Branding", "ans": "B"},
+  {"q": "A customer reviews product quality after buying it. This stage is:", "a": "Need Recognition", "b": "Post Purchase Evaluation", "c": "Promotion", "d": "Segmentation", "e": "Forecasting", "ans": "B"},
+  {"q": "A company designs online strategy after studying customers. This reflects:", "a": "Product Focus", "b": "Customer Focus", "c": "Sales Focus", "d": "Supply Focus", "e": "Cost Focus", "ans": "B"},
+  {"q": "A business uses Reach, Act, Convert, and Engage model. This model is:", "a": "SWOT", "b": "RACE", "c": "KPI", "d": "SEO", "e": "ROI", "ans": "B"},
+  {"q": "A company runs online ads to increase awareness. This stage is:", "a": "Reach", "b": "Convert", "c": "Engage", "d": "Act", "e": "Retain", "ans": "A"},
+  {"q": "A visitor likes and comments on a social media post. This stage is:", "a": "Reach", "b": "Act", "c": "Convert", "d": "Engage", "e": "Purchase", "ans": "B"},
+  {"q": "A customer purchases a product from a website. This stage is:", "a": "Reach", "b": "Act", "c": "Convert", "d": "Engage", "e": "Planning", "ans": "C"},
+  {"q": "A company sends discount emails to existing customers. This belongs to:", "a": "Reach", "b": "Act", "c": "Convert", "d": "Engage", "e": "Planning", "ans": "D"},
+  {"q": "A website improves its ranking on Google. This is:", "a": "PPC", "b": "SEO", "c": "ROI", "d": "CRM", "e": "KPI", "ans": "B"},
+  {"q": "A business pays Google for advertisements. This is:", "a": "SEO", "b": "PPC", "c": "Branding", "d": "Blogging", "e": "Forecasting", "ans": "B"},
+  {"q": "A company sends promotional messages through email. This is:", "a": "PPC", "b": "Email Marketing", "c": "SEO", "d": "Branding", "e": "Distribution", "ans": "B"},
+  {"q": "A company promotes products through Instagram and Facebook. This is:", "a": "Email Marketing", "b": "Social Media Marketing", "c": "SEO", "d": "Forecasting", "e": "Distribution", "ans": "B"},
+  {"q": "A company uploads product videos on YouTube. This is:", "a": "Video Marketing", "b": "Print Advertising", "c": "SEO", "d": "Auditing", "e": "Accounting", "ans": "A"},
+  {"q": "A business writes blogs to educate customers. This is:", "a": "Content Marketing", "b": "Distribution", "c": "Forecasting", "d": "Cold Calling", "e": "Pricing", "ans": "A"},
+  {"q": "A company tracks website visitors using software. This is:", "a": "Manufacturing", "b": "Analytics", "c": "Auditing", "d": "Pricing", "e": "Distribution", "ans": "B"},
+  {"q": "A company measures clicks and sales online. These measures are:", "a": "SWOT", "b": "KPIs", "c": "ROI", "d": "CRM", "e": "AIDA", "ans": "B"},
+  {"q": "A business calculates profit earned from digital ads. This is:", "a": "KPI", "b": "ROI", "c": "CRO", "d": "SEO", "e": "PPC", "ans": "B"},
+  {"q": "A website improves checkout process for better sales. This is:", "a": "SEO", "b": "CRO", "c": "Branding", "d": "Forecasting", "e": "Segmentation", "ans": "B"},
+  {"q": "A company shows ads again to previous visitors. This is:", "a": "Blogging", "b": "Remarketing", "c": "Pricing", "d": "SEO", "e": "Forecasting", "ans": "B"},
+  {"q": "A visitor opens a special webpage after clicking an ad. This page is called:", "a": "Homepage", "b": "Landing Page", "c": "Product Page", "d": "Exit Page", "e": "Contact Page", "ans": "B"},
+  {"q": "A company sends customized offers to customers. This is:", "a": "Personalization", "b": "Positioning", "c": "Branding", "d": "Forecasting", "e": "Standardization", "ans": "A"},
+  {"q": "A business changes online strategy according to market trends. This reflects:", "a": "Flexible Planning", "b": "Downsizing", "c": "Auditing", "d": "Staffing", "e": "Distribution", "ans": "A"},
+  {"q": "A startup explains how it will earn money. This is called:", "a": "Sales Plan", "b": "Business Model", "c": "HR Plan", "d": "Audit Plan", "e": "Marketing Mix", "ans": "B"},
+  {"q": "A business lists suppliers and distributors in its plan. These are:", "a": "Revenue Streams", "b": "Key Partners", "c": "Channels", "d": "Cost Structure", "e": "Segments", "ans": "B"},
+  {"q": "A company identifies production and marketing tasks. These are:", "a": "Key Resources", "b": "Key Activities", "c": "Channels", "d": "Segments", "e": "Costs", "ans": "B"},
+  {"q": "A startup highlights employees and technology as assets. These are:", "a": "Key Activities", "b": "Key Resources", "c": "Channels", "d": "Segments", "e": "Costs", "ans": "B"},
+  {"q": "A company explains why customers should buy its product. This is:", "a": "Revenue Stream", "b": "Value Proposition", "c": "Cost Structure", "d": "Promotion", "e": "Forecasting", "ans": "B"},
+  {"q": "A company uses WhatsApp and social media to contact buyers. These are:", "a": "Activities", "b": "Channels", "c": "Competitors", "d": "Forecasts", "e": "Costs", "ans": "B"},
+  {"q": "A company divides buyers according to lifestyle. This is:", "a": "Revenue Stream", "b": "Customer Segmentation", "c": "Promotion", "d": "Forecasting", "e": "Distribution", "ans": "B"},
+  {"q": "A company identifies fixed and variable expenses. This is:", "a": "Cost Structure", "b": "Revenue Stream", "c": "Promotion Mix", "d": "Segmentation", "e": "Distribution", "ans": "A"},
+  {"q": "A business earns income through subscriptions and ads. These are:", "a": "Channels", "b": "Revenue Streams", "c": "Segments", "d": "Promotions", "e": "Partnerships", "ans": "B"},
+  {"q": "A startup gives a short 1-minute introduction to investors. This is:", "a": "Rocket Pitch", "b": "Elevator Pitch", "c": "SWOT", "d": "SEO Plan", "e": "Marketing Mix", "ans": "B"},
+  {"q": "A founder presents business idea to large audience in 5 minutes. This is:", "a": "Elevator Pitch", "b": "Rocket Pitch", "c": "KPI Report", "d": "Financial Report", "e": "Blog Presentation", "ans": "B"},
+  {"q": "A startup prepares PowerPoint slides for investors. This is:", "a": "Pitch Deck", "b": "Elevator Pitch", "c": "Segmentation", "d": "SWOT", "e": "Forecasting", "ans": "A"},
+  {"q": "A presenter tells a story to attract investors. This helps to:", "a": "Reduce Engagement", "b": "Capture Attention", "c": "Increase Costs", "d": "Delay Meetings", "e": "Reduce Trust", "ans": "B"},
+  {"q": "A startup supports claims using research and statistics. This improves:", "a": "Weakness", "b": "Credibility", "c": "Risk", "d": "Cost", "e": "Competition", "ans": "B"},
+  {"q": "A presenter ignores competitors during a pitch. This is considered:", "a": "Good Strategy", "b": "Mistake", "c": "Innovation", "d": "Positioning", "e": "Branding", "ans": "B"},
+  {"q": "A founder explains ROI and break-even point clearly. This shows:", "a": "Financial Attractiveness", "b": "Segmentation", "c": "Forecasting", "d": "Positioning", "e": "Recruitment", "ans": "A"},
+  {"q": "A startup keeps presentation short and clear. This reflects:", "a": "Complexity", "b": "Clarity", "c": "Downsizing", "d": "Auditing", "e": "Forecasting", "ans": "B"},
+  {"q": "A founder confidently explains future business vision. This improves:", "a": "Negative Image", "b": "First Impression", "c": "Supply Issues", "d": "Production Cost", "e": "Turnover", "ans": "B"},
+  {"q": "A presenter maintains eye contact and confident posture. This is part of:", "a": "Non-verbal Communication", "b": "Accounting", "c": "Pricing", "d": "Manufacturing", "e": "Forecasting", "ans": "A"},
+  {"q": "A startup invites investors to join business at the end of presentation. This is:", "a": "SWOT", "b": "Call to Action", "c": "Distribution", "d": "Cost Structure", "e": "Segmentation", "ans": "B"},
+  {"q": "A company lowers prices during Eid to attract buyers. This strategy relates to:", "a": "Product", "b": "Price", "c": "Place", "d": "Promotion", "e": "Packaging", "ans": "B"},
+  {"q": "A bakery offers free home delivery to customers. This relates to:", "a": "Place", "b": "Promotion", "c": "Product", "d": "Pricing", "e": "Branding", "ans": "A"},
+  {"q": "A company uses Instagram ads to promote perfumes. This activity is:", "a": "Distribution", "b": "Promotion", "c": "Auditing", "d": "Forecasting", "e": "Staffing", "ans": "B"},
+  {"q": "A customer searches online reviews before buying a laptop. This stage is:", "a": "Purchase Decision", "b": "Information Search", "c": "Distribution", "d": "Promotion", "e": "Segmentation", "ans": "B"},
+  {"q": "A company introduces eco-friendly packaging to attract buyers. This is part of:", "a": "Product Strategy", "b": "Recruitment", "c": "Accounting", "d": "Financing", "e": "Auditing", "ans": "A"},
+  {"q": "A company studies customer emotions while buying products. This is:", "a": "Emotional Need", "b": "Supply Analysis", "c": "Pricing", "d": "Distribution", "e": "Forecasting", "ans": "A"},
+  {"q": "A business targets gym members for protein products. These buyers are the:", "a": "Suppliers", "b": "Target Market", "c": "Collaborators", "d": "Competitors", "e": "Employees", "ans": "B"},
+  {"q": "A company introduces premium packaging for gift items. This mainly improves:", "a": "Branding", "b": "Accounting", "c": "Auditing", "d": "Forecasting", "e": "Financing", "ans": "A"},
+  {"q": "A company studies market trends before launching a product. This is called:", "a": "Market Research", "b": "Staffing", "c": "Manufacturing", "d": "Recruitment", "e": "Distribution", "ans": "A"},
+  {"q": "A business focuses only on female customers aged 20-30. This is:", "a": "Market Segmentation", "b": "Distribution", "c": "Forecasting", "d": "Production", "e": "Auditing", "ans": "A"},
+  {"q": "A company compares its product quality with rivals. This is:", "a": "Competitor Analysis", "b": "HR Analysis", "c": "SWOT", "d": "Pricing", "e": "Financing", "ans": "A"},
+  {"q": "A business introduces discounts for repeat customers. This helps improve:", "a": "Customer Loyalty", "b": "Forecasting", "c": "Recruitment", "d": "Manufacturing", "e": "Auditing", "ans": "A"},
+  {"q": "A company studies inflation and interest rates before expansion. This is:", "a": "Context Analysis", "b": "Branding", "c": "Segmentation", "d": "Pricing", "e": "Distribution", "ans": "A"},
+  {"q": "A business focuses on one small market niche only. This strategy is:", "a": "Cost Leadership", "b": "Focus Strategy", "c": "Differentiation", "d": "Positioning", "e": "Promotion", "ans": "B"},
+  {"q": "A company uses customer surveys to collect opinions. This is:", "a": "Market Research", "b": "Forecasting", "c": "Distribution", "d": "Production", "e": "Recruitment", "ans": "A"},
+  {"q": "A company posts daily updates on Facebook. This is part of:", "a": "Social Media Marketing", "b": "Accounting", "c": "Forecasting", "d": "Auditing", "e": "Staffing", "ans": "A"},
+  {"q": "A business improves website keywords for better Google ranking. This is:", "a": "SEO", "b": "PPC", "c": "CRO", "d": "KPI", "e": "ROI", "ans": "A"},
+  {"q": "A company pays influencers to promote products online. This is:", "a": "Influencer Marketing", "b": "Manufacturing", "c": "Recruitment", "d": "Forecasting", "e": "Accounting", "ans": "A"},
+  {"q": "A website tracks customer clicks and traffic sources. This uses:", "a": "Analytics", "b": "Branding", "c": "Segmentation", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A business sends personalized birthday discounts through email. This is:", "a": "Email Marketing", "b": "Forecasting", "c": "Recruitment", "d": "Manufacturing", "e": "Auditing", "ans": "A"},
+  {"q": "A company uploads customer testimonials on YouTube. This is:", "a": "Video Marketing", "b": "Forecasting", "c": "Distribution", "d": "Auditing", "e": "Accounting", "ans": "A"},
+  {"q": "A business tracks conversion rate after running online ads. This measures:", "a": "Performance", "b": "Recruitment", "c": "Manufacturing", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A company creates blogs to improve search ranking. This supports:", "a": "Content Marketing", "b": "Accounting", "c": "Staffing", "d": "Distribution", "e": "Financing", "ans": "A"},
+  {"q": "A company runs Google Ads for a new product launch. This is:", "a": "PPC", "b": "SEO", "c": "Forecasting", "d": "Manufacturing", "e": "Accounting", "ans": "A"},
+  {"q": "A customer receives reminder emails for abandoned cart items. This is:", "a": "Remarketing", "b": "Recruitment", "c": "Forecasting", "d": "Production", "e": "Auditing", "ans": "A"},
+  {"q": "A business uses hashtags to improve post visibility online. This is related to:", "a": "Social Media Marketing", "b": "Forecasting", "c": "Manufacturing", "d": "Auditing", "e": "Accounting", "ans": "A"},
+  {"q": "A company measures followers and likes on Instagram. These are:", "a": "KPIs", "b": "ROI", "c": "SWOT", "d": "Segments", "e": "Channels", "ans": "A"},
+  {"q": "A business changes website design to improve user experience. This supports:", "a": "CRO", "b": "Forecasting", "c": "Accounting", "d": "Staffing", "e": "Distribution", "ans": "A"},
+  {"q": "A company creates short reels to attract younger audiences. This is:", "a": "Video Marketing", "b": "Auditing", "c": "Recruitment", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A company replies to customer comments on Facebook. This improves:", "a": "Engagement", "b": "Manufacturing", "c": "Forecasting", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup identifies suppliers for raw materials. These are:", "a": "Key Partners", "b": "Channels", "c": "Costs", "d": "Revenue Streams", "e": "Segments", "ans": "A"},
+  {"q": "A company lists customer support and delivery as important tasks. These are:", "a": "Key Activities", "b": "Revenue Streams", "c": "Segments", "d": "Promotions", "e": "Forecasts", "ans": "A"},
+  {"q": "A startup uses software and employees to operate business. These are:", "a": "Key Resources", "b": "Channels", "c": "Costs", "d": "Revenue Streams", "e": "Segments", "ans": "A"},
+  {"q": "A company explains why its service is better than competitors. This is:", "a": "Value Proposition", "b": "Forecasting", "c": "Recruitment", "d": "Auditing", "e": "Distribution", "ans": "A"},
+  {"q": "A company uses delivery apps to reach customers. These are:", "a": "Channels", "b": "Costs", "c": "Promotions", "d": "Segments", "e": "Forecasts", "ans": "A"},
+  {"q": "A startup identifies students as its main buyers. These are:", "a": "Customer Segments", "b": "Revenue Streams", "c": "Costs", "d": "Activities", "e": "Resources", "ans": "A"},
+  {"q": "A company calculates rent and salaries as expenses. This is:", "a": "Cost Structure", "b": "Revenue Stream", "c": "Segmentation", "d": "Promotion", "e": "Forecasting", "ans": "A"},
+  {"q": "A business earns through advertising and subscriptions. These are:", "a": "Revenue Streams", "b": "Channels", "c": "Resources", "d": "Segments", "e": "Promotions", "ans": "A"},
+  {"q": "A founder gives a short introduction in an elevator. This is:", "a": "Elevator Pitch", "b": "Rocket Pitch", "c": "SWOT", "d": "KPI", "e": "SEO", "ans": "A"},
+  {"q": "A startup presents business idea to many investors in an event. This is:", "a": "Rocket Pitch", "b": "Elevator Pitch", "c": "SWOT", "d": "SEO", "e": "Auditing", "ans": "A"},
+  {"q": "A startup uses PowerPoint slides during investor meeting. This is:", "a": "Pitch Deck", "b": "Marketing Mix", "c": "SWOT", "d": "KPI", "e": "CRM", "ans": "A"},
+  {"q": "A presenter uses confident body language during pitch. This improves:", "a": "First Impression", "b": "Distribution", "c": "Forecasting", "d": "Manufacturing", "e": "Recruitment", "ans": "A"},
+  {"q": "A startup explains expected profits and ROI in presentation. This shows:", "a": "Financial Attractiveness", "b": "Segmentation", "c": "Recruitment", "d": "Branding", "e": "Auditing", "ans": "A"},
+  {"q": "A presenter clearly explains competitor differences. This improves:", "a": "Differentiation", "b": "Forecasting", "c": "Accounting", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A startup keeps pitch simple and short. This reflects:", "a": "Clarity", "b": "Complexity", "c": "Downsizing", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A company offers 'Buy 1 Get 1 Free' deals. This is:", "a": "Promotion", "b": "Pricing", "c": "Auditing", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A customer buys a product after seeing YouTube ad. This is part of:", "a": "Digital Marketing", "b": "Accounting", "c": "Auditing", "d": "Staffing", "e": "Forecasting", "ans": "A"},
+  {"q": "A company studies customer buying habits. This is:", "a": "Customer Analysis", "b": "Recruitment", "c": "Forecasting", "d": "Accounting", "e": "Auditing", "ans": "A"},
+  {"q": "A startup creates a logo and slogan for recognition. This supports:", "a": "Branding", "b": "Distribution", "c": "Forecasting", "d": "Staffing", "e": "Auditing", "ans": "A"},
+  {"q": "A company uses online surveys to collect customer opinions. This is:", "a": "Market Research", "b": "Manufacturing", "c": "Recruitment", "d": "Forecasting", "e": "Accounting", "ans": "A"},
+  {"q": "A business tracks website visitors daily. This is part of:", "a": "Analytics", "b": "Segmentation", "c": "Branding", "d": "Staffing", "e": "Forecasting", "ans": "A"},
+  {"q": "A company creates customer groups based on income. This is:", "a": "Market Segmentation", "b": "Recruitment", "c": "Auditing", "d": "Forecasting", "e": "Production", "ans": "A"},
+  {"q": "A business sends promotional SMS messages to buyers. This is:", "a": "Mobile Marketing", "b": "Manufacturing", "c": "Auditing", "d": "Staffing", "e": "Recruitment", "ans": "A"},
+  {"q": "A startup calculates expected market demand. This is:", "a": "Market Sizing", "b": "Forecasting", "c": "Recruitment", "d": "Auditing", "e": "Distribution", "ans": "A"},
+  {"q": "A company encourages customers to leave reviews online. This improves:", "a": "Engagement", "b": "Manufacturing", "c": "Forecasting", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A company offers free product samples in stores. This is:", "a": "Promotion", "b": "Accounting", "c": "Forecasting", "d": "Auditing", "e": "Staffing", "ans": "A"},
+  {"q": "A customer compares prices before buying a mobile phone. This stage is:", "a": "Evaluation of Alternatives", "b": "Branding", "c": "Segmentation", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A business opens branches in multiple cities. This supports:", "a": "Expansion", "b": "Auditing", "c": "Recruitment", "d": "Forecasting", "e": "Downsizing", "ans": "A"},
+  {"q": "A company studies strengths, weaknesses, opportunities, and threats. This is:", "a": "SWOT Analysis", "b": "Forecasting", "c": "Recruitment", "d": "Branding", "e": "Auditing", "ans": "A"},
+  {"q": "A startup explains business mission and future goals to investors. This improves:", "a": "Investor Confidence", "b": "Forecasting", "c": "Accounting", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A company launches a new flavor of juice for teenagers. This is related to:", "a": "Product Strategy", "b": "Accounting", "c": "Auditing", "d": "Financing", "e": "Recruitment", "ans": "A"},
+  {"q": "A restaurant offers discounts during Ramadan. This is:", "a": "Promotion", "b": "Staffing", "c": "Auditing", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A company sells products through Daraz and stores. This relates to:", "a": "Place", "b": "Pricing", "c": "Accounting", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A business studies customer age and income before marketing. This is:", "a": "Market Segmentation", "b": "Auditing", "c": "Financing", "d": "Manufacturing", "e": "Staffing", "ans": "A"},
+  {"q": "A company studies why customers prefer competitors. This is:", "a": "Competitor Analysis", "b": "Forecasting", "c": "Recruitment", "d": "Accounting", "e": "Distribution", "ans": "A"},
+  {"q": "A customer buys medicine because of illness. This represents:", "a": "Need", "b": "Want", "c": "Branding", "d": "Promotion", "e": "Forecasting", "ans": "A"},
+  {"q": "A student wants branded headphones for style. This is:", "a": "Need", "b": "Want", "c": "Distribution", "d": "Forecasting", "e": "Auditing", "ans": "B"},
+  {"q": "A customer buys expensive perfume with available money. This is:", "a": "Demand", "b": "Need", "c": "Distribution", "d": "Recruitment", "e": "Forecasting", "ans": "A"},
+  {"q": "A business offers free delivery service to attract customers. This is part of:", "a": "Place Strategy", "b": "Accounting", "c": "Recruitment", "d": "Auditing", "e": "Financing", "ans": "A"},
+  {"q": "A company improves product quality to compete in market. This creates:", "a": "Competitive Advantage", "b": "Forecasting", "c": "Downsizing", "d": "Staffing", "e": "Auditing", "ans": "A"},
+  {"q": "A startup studies political and economic changes before launch. This is:", "a": "Context Analysis", "b": "Product Planning", "c": "Recruitment", "d": "Distribution", "e": "Branding", "ans": "A"},
+  {"q": "A company targets only athletes for sports shoes. These buyers are the:", "a": "Target Market", "b": "Competitors", "c": "Collaborators", "d": "Suppliers", "e": "Employees", "ans": "A"},
+  {"q": "A business checks customer satisfaction after purchase. This is:", "a": "Post Purchase Evaluation", "b": "Promotion", "c": "Forecasting", "d": "Segmentation", "e": "Distribution", "ans": "A"},
+  {"q": "A company studies customer problems before designing product. This is:", "a": "Need Analysis", "b": "Auditing", "c": "Staffing", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A business compares rival prices and features. This is:", "a": "Competitor Analysis", "b": "Accounting", "c": "Recruitment", "d": "Forecasting", "e": "Staffing", "ans": "A"},
+  {"q": "A company uses Facebook ads to increase followers. This is:", "a": "Social Media Marketing", "b": "Accounting", "c": "Forecasting", "d": "Auditing", "e": "Recruitment", "ans": "A"},
+  {"q": "A business improves website loading speed for users. This supports:", "a": "User Experience", "b": "Auditing", "c": "Staffing", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A company pays influencers to review products online. This is:", "a": "Influencer Marketing", "b": "Distribution", "c": "Forecasting", "d": "Manufacturing", "e": "Accounting", "ans": "A"},
+  {"q": "A company tracks website visitors through Google Analytics. This is:", "a": "Analytics", "b": "Branding", "c": "Recruitment", "d": "Auditing", "e": "Forecasting", "ans": "A"},
+  {"q": "A business sends welcome emails to new customers. This is:", "a": "Email Marketing", "b": "Forecasting", "c": "Manufacturing", "d": "Accounting", "e": "Recruitment", "ans": "A"},
+  {"q": "A company uploads product demonstration videos online. This is:", "a": "Video Marketing", "b": "Distribution", "c": "Auditing", "d": "Recruitment", "e": "Forecasting", "ans": "A"},
+  {"q": "A business creates blogs to educate buyers. This supports:", "a": "Content Marketing", "b": "Accounting", "c": "Forecasting", "d": "Manufacturing", "e": "Staffing", "ans": "A"},
+  {"q": "A company improves checkout process on website. This supports:", "a": "CRO", "b": "Recruitment", "c": "Forecasting", "d": "Accounting", "e": "Auditing", "ans": "A"},
+  {"q": "A company sends reminders to customers who left items in cart. This is:", "a": "Remarketing", "b": "Staffing", "c": "Auditing", "d": "Distribution", "e": "Forecasting", "ans": "A"},
+  {"q": "A business measures likes, shares, and comments online. These are:", "a": "KPIs", "b": "SWOT", "c": "ROI", "d": "Segments", "e": "Channels", "ans": "A"},
+  {"q": "A company creates short TikTok videos for promotion. This is:", "a": "Video Marketing", "b": "Forecasting", "c": "Staffing", "d": "Auditing", "e": "Manufacturing", "ans": "A"},
+  {"q": "A website appears at top of Google search results. This is because of:", "a": "SEO", "b": "Forecasting", "c": "Recruitment", "d": "Auditing", "e": "Distribution", "ans": "A"},
+  {"q": "A company pays Google to show online ads. This is:", "a": "PPC", "b": "SEO", "c": "Forecasting", "d": "Staffing", "e": "Manufacturing", "ans": "A"},
+  {"q": "A business uses hashtags to increase visibility on Instagram. This is part of:", "a": "Social Media Marketing", "b": "Auditing", "c": "Forecasting", "d": "Recruitment", "e": "Manufacturing", "ans": "A"},
+  {"q": "A company tracks email open rates and clicks. These are:", "a": "Email KPIs", "b": "SWOT", "c": "ROI", "d": "Distribution", "e": "Forecasting", "ans": "A"},
+  {"q": "A startup explains how customers will buy products online. This relates to:", "a": "Channels", "b": "Revenue Streams", "c": "Segments", "d": "Costs", "e": "Forecasts", "ans": "A"},
+  {"q": "A business identifies marketing and delivery tasks. These are:", "a": "Key Activities", "b": "Segments", "c": "Costs", "d": "Promotions", "e": "Forecasts", "ans": "A"},
+  {"q": "A startup uses technology and skilled employees for operations. These are:", "a": "Key Resources", "b": "Revenue Streams", "c": "Channels", "d": "Costs", "e": "Segments", "ans": "A"},
+  {"q": "A company explains why its service is unique. This is:", "a": "Value Proposition", "b": "Forecasting", "c": "Recruitment", "d": "Auditing", "e": "Accounting", "ans": "A"},
+  {"q": "A business earns money through memberships and subscriptions. These are:", "a": "Revenue Streams", "b": "Channels", "c": "Costs", "d": "Promotions", "e": "Activities", "ans": "A"},
+  {"q": "A startup identifies students and freelancers as customers. These are:", "a": "Customer Segments", "b": "Channels", "c": "Resources", "d": "Promotions", "e": "Costs", "ans": "A"},
+  {"q": "A company calculates salaries and rent as expenses. This is:", "a": "Cost Structure", "b": "Revenue Stream", "c": "Segmentation", "d": "Branding", "e": "Distribution", "ans": "A"},
+  {"q": "A startup gives a short introduction during networking event. This is:", "a": "Elevator Pitch", "b": "Rocket Pitch", "c": "SWOT", "d": "KPI", "e": "Forecasting", "ans": "A"},
+  {"q": "A founder presents business idea to a large audience in event. This is:", "a": "Rocket Pitch", "b": "Elevator Pitch", "c": "Audit Report", "d": "KPI Report", "e": "SEO Plan", "ans": "A"},
+  {"q": "A startup prepares slides for investors. This is:", "a": "Pitch Deck", "b": "SWOT", "c": "KPI Report", "d": "Segmentation", "e": "Recruitment", "ans": "A"},
+  {"q": "A presenter uses storytelling to attract investors. This improves:", "a": "Audience Engagement", "b": "Forecasting", "c": "Accounting", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A startup uses research and surveys to support claims. This improves:", "a": "Credibility", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A founder confidently explains future business goals. This improves:", "a": "First Impression", "b": "Forecasting", "c": "Distribution", "d": "Manufacturing", "e": "Accounting", "ans": "A"},
+  {"q": "A presenter maintains eye contact and confident posture. This is:", "a": "Non-verbal Communication", "b": "Accounting", "c": "Pricing", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A startup invites investors to join business at end of pitch. This is:", "a": "Call to Action", "b": "SWOT", "c": "KPI", "d": "Segmentation", "e": "Distribution", "ans": "A"},
+  {"q": "A company offers 'Buy 2 Get 1 Free' deals. This is:", "a": "Promotion", "b": "Accounting", "c": "Auditing", "d": "Recruitment", "e": "Forecasting", "ans": "A"},
+  {"q": "A business collects customer opinions using surveys. This is:", "a": "Market Research", "b": "Staffing", "c": "Forecasting", "d": "Manufacturing", "e": "Auditing", "ans": "A"},
+  {"q": "A company creates logo and slogan for recognition. This supports:", "a": "Branding", "b": "Accounting", "c": "Recruitment", "d": "Forecasting", "e": "Distribution", "ans": "A"},
+  {"q": "A startup studies total market demand before launch. This is:", "a": "Market Sizing", "b": "Auditing", "c": "Staffing", "d": "Recruitment", "e": "Distribution", "ans": "A"},
+  {"q": "A company offers free product samples in stores. This is:", "a": "Promotion", "b": "Forecasting", "c": "Auditing", "d": "Staffing", "e": "Recruitment", "ans": "A"},
+  {"q": "A customer compares mobile brands before purchase. This stage is:", "a": "Evaluation of Alternatives", "b": "Branding", "c": "Forecasting", "d": "Distribution", "e": "Segmentation", "ans": "A"},
+  {"q": "A company opens new branches in different cities. This supports:", "a": "Expansion", "b": "Downsizing", "c": "Forecasting", "d": "Auditing", "e": "Recruitment", "ans": "A"},
+  {"q": "A business studies customer buying habits. This is:", "a": "Customer Analysis", "b": "Accounting", "c": "Forecasting", "d": "Auditing", "e": "Recruitment", "ans": "A"},
+  {"q": "A company encourages customers to leave online reviews. This improves:", "a": "Engagement", "b": "Forecasting", "c": "Manufacturing", "d": "Staffing", "e": "Auditing", "ans": "A"},
+  {"q": "A business uses WhatsApp for customer support. This improves:", "a": "Customer Relationship", "b": "Forecasting", "c": "Auditing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company launches a product for children only. This is:", "a": "Target Marketing", "b": "Recruitment", "c": "Auditing", "d": "Forecasting", "e": "Staffing", "ans": "A"},
+  {"q": "A startup studies competitors before pricing products. This is:", "a": "Competitor Analysis", "b": "Accounting", "c": "Forecasting", "d": "Auditing", "e": "Recruitment", "ans": "A"},
+  {"q": "A company uses online ads to increase website traffic. This is:", "a": "Digital Marketing", "b": "Accounting", "c": "Staffing", "d": "Forecasting", "e": "Auditing", "ans": "A"},
+  {"q": "A business measures sales growth after campaign. This is:", "a": "KPI Measurement", "b": "Accounting", "c": "Auditing", "d": "Staffing", "e": "Recruitment", "ans": "A"},
+  {"q": "A company creates attractive packaging for products. This improves:", "a": "Branding", "b": "Forecasting", "c": "Recruitment", "d": "Auditing", "e": "Manufacturing", "ans": "A"},
+  {"q": "A startup explains expected profits to investors. This improves:", "a": "Investor Confidence", "b": "Forecasting", "c": "Accounting", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A company uses customer testimonials in advertisements. This improves:", "a": "Trust", "b": "Auditing", "c": "Forecasting", "d": "Manufacturing", "e": "Staffing", "ans": "A"},
+  {"q": "A business improves product quality to satisfy buyers. This supports:", "a": "Customer Satisfaction", "b": "Forecasting", "c": "Recruitment", "d": "Accounting", "e": "Auditing", "ans": "A"},
+  {"q": "A company tracks conversion rates from online ads. This measures:", "a": "Campaign Performance", "b": "Staffing", "c": "Forecasting", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup changes strategy according to market trends. This reflects:", "a": "Flexibility", "b": "Downsizing", "c": "Recruitment", "d": "Auditing", "e": "Accounting", "ans": "A"},
+  {"q": "A company creates a loyalty card program for repeat customers. This improves:", "a": "Retention", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A business promotes products during sports events. This is:", "a": "Promotion", "b": "Forecasting", "c": "Auditing", "d": "Accounting", "e": "Recruitment", "ans": "A"},
+  {"q": "A company checks competitor advertisements before launching campaign. This is:", "a": "Competitor Analysis", "b": "Staffing", "c": "Forecasting", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup identifies key suppliers before launch. These are:", "a": "Key Partners", "b": "Revenue Streams", "c": "Segments", "d": "Costs", "e": "Forecasts", "ans": "A"},
+  {"q": "A business creates customer groups according to location. This is:", "a": "Segmentation", "b": "Auditing", "c": "Forecasting", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company studies market opportunities before expansion. This is:", "a": "SWOT Analysis", "b": "Staffing", "c": "Forecasting", "d": "Accounting", "e": "Recruitment", "ans": "A"},
+  {"q": "A customer buys a product after seeing Instagram ad. This is part of:", "a": "Social Media Marketing", "b": "Auditing", "c": "Recruitment", "d": "Forecasting", "e": "Accounting", "ans": "A"},
+  {"q": "A business uses email newsletters to contact customers. This is:", "a": "Email Marketing", "b": "Forecasting", "c": "Recruitment", "d": "Accounting", "e": "Auditing", "ans": "A"},
+  {"q": "A startup prepares financial figures for investors. This supports:", "a": "Pitch Presentation", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A company uses influencers to review products online. This is:", "a": "Influencer Marketing", "b": "Forecasting", "c": "Recruitment", "d": "Accounting", "e": "Auditing", "ans": "A"},
+  {"q": "A company improves website design for mobile users. This supports:", "a": "User Experience", "b": "Recruitment", "c": "Forecasting", "d": "Auditing", "e": "Accounting", "ans": "A"},
+  {"q": "A business creates awareness using YouTube ads. This is part of:", "a": "Reach Stage", "b": "Convert Stage", "c": "Engage Stage", "d": "Forecasting", "e": "Auditing", "ans": "A"},
+  {"q": "A company encourages users to interact with content online. This belongs to:", "a": "Act Stage", "b": "Reach Stage", "c": "Convert Stage", "d": "Staffing", "e": "Recruitment", "ans": "A"},
+  {"q": "A customer completes online purchase after seeing ad. This belongs to:", "a": "Convert Stage", "b": "Reach Stage", "c": "Engage Stage", "d": "Forecasting", "e": "Auditing", "ans": "A"},
+  {"q": "A company sends thank-you emails after purchase. This improves:", "a": "Engagement", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A company launches a new shampoo for teenagers. This is related to:", "a": "Product Strategy", "b": "Auditing", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A restaurant offers 'Free Drink with Meal' deal. This is:", "a": "Promotion", "b": "Financing", "c": "Forecasting", "d": "Staffing", "e": "Auditing", "ans": "A"},
+  {"q": "A business sells products through supermarkets and websites. This relates to:", "a": "Place Strategy", "b": "Recruitment", "c": "Accounting", "d": "Forecasting", "e": "Auditing", "ans": "A"},
+  {"q": "A company studies customer age and lifestyle before advertising. This is:", "a": "Market Segmentation", "b": "Auditing", "c": "Recruitment", "d": "Manufacturing", "e": "Forecasting", "ans": "A"},
+  {"q": "A customer buys medicine because of illness. This is an example of:", "a": "Need", "b": "Want", "c": "Branding", "d": "Forecasting", "e": "Promotion", "ans": "A"},
+  {"q": "A student buys expensive sneakers because they are fashionable. This is:", "a": "Want", "b": "Need", "c": "Distribution", "d": "Forecasting", "e": "Auditing", "ans": "A"},
+  {"q": "A company compares product quality with competitors. This is:", "a": "Competitor Analysis", "b": "Recruitment", "c": "Forecasting", "d": "Accounting", "e": "Staffing", "ans": "A"},
+  {"q": "A company studies inflation and taxes before expansion. This is:", "a": "Context Analysis", "b": "Product Strategy", "c": "Recruitment", "d": "Branding", "e": "Distribution", "ans": "A"},
+  {"q": "A business works closely with suppliers to improve delivery. These are:", "a": "Collaborators", "b": "Competitors", "c": "Investors", "d": "Customers", "e": "Employees", "ans": "A"},
+  {"q": "A company creates value for customers to earn profit. This process is:", "a": "Marketing", "b": "Manufacturing", "c": "Accounting", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A customer searches online reviews before buying a laptop. This stage is:", "a": "Information Search", "b": "Distribution", "c": "Promotion", "d": "Segmentation", "e": "Branding", "ans": "A"},
+  {"q": "A customer compares mobile phones before purchase. This stage is:", "a": "Evaluation of Alternatives", "b": "Need Recognition", "c": "Promotion", "d": "Branding", "e": "Forecasting", "ans": "A"},
+  {"q": "A customer checks product quality after buying. This stage is:", "a": "Post Purchase Evaluation", "b": "Promotion", "c": "Distribution", "d": "Segmentation", "e": "Forecasting", "ans": "A"},
+  {"q": "A company introduces eco-friendly packaging for products. This supports:", "a": "Branding", "b": "Auditing", "c": "Forecasting", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business offers premium product features to stand out. This strategy is:", "a": "Differentiation", "b": "Cost Leadership", "c": "Recruitment", "d": "Forecasting", "e": "Segmentation", "ans": "A"},
+  {"q": "A company promotes products through Instagram reels. This is:", "a": "Social Media Marketing", "b": "Forecasting", "c": "Auditing", "d": "Recruitment", "e": "Staffing", "ans": "A"},
+  {"q": "A website improves keywords to rank higher on Google. This is:", "a": "SEO", "b": "PPC", "c": "Forecasting", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A business pays Google to show advertisements online. This is:", "a": "PPC", "b": "SEO", "c": "Forecasting", "d": "Staffing", "e": "Manufacturing", "ans": "A"},
+  {"q": "A company sends promotional offers through email. This is:", "a": "Email Marketing", "b": "Accounting", "c": "Auditing", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A business uploads tutorials on YouTube for promotion. This is:", "a": "Video Marketing", "b": "Recruitment", "c": "Forecasting", "d": "Accounting", "e": "Auditing", "ans": "A"},
+  {"q": "A company creates blogs to educate customers. This supports:", "a": "Content Marketing", "b": "Staffing", "c": "Manufacturing", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A company measures website traffic and clicks. These measures are:", "a": "KPIs", "b": "SWOT", "c": "Forecasting", "d": "Segments", "e": "Channels", "ans": "A"},
+  {"q": "A business calculates profit earned from online campaigns. This is:", "a": "ROI", "b": "SEO", "c": "Forecasting", "d": "Recruitment", "e": "Staffing", "ans": "A"},
+  {"q": "A company improves checkout process to increase sales. This is:", "a": "CRO", "b": "Forecasting", "c": "Accounting", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A business shows ads again to previous visitors. This is:", "a": "Remarketing", "b": "Forecasting", "c": "Manufacturing", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A customer opens a special webpage after clicking an ad. This page is:", "a": "Landing Page", "b": "Homepage", "c": "Product Page", "d": "Contact Page", "e": "Exit Page", "ans": "A"},
+  {"q": "A company sends personalized discounts to buyers. This is:", "a": "Personalization", "b": "Forecasting", "c": "Auditing", "d": "Recruitment", "e": "Staffing", "ans": "A"},
+  {"q": "A business updates digital plans according to trends. This reflects:", "a": "Flexible Planning", "b": "Downsizing", "c": "Forecasting", "d": "Auditing", "e": "Staffing", "ans": "A"},
+  {"q": "A company uses hashtags to improve visibility online. This supports:", "a": "Social Media Marketing", "b": "Recruitment", "c": "Accounting", "d": "Forecasting", "e": "Auditing", "ans": "A"},
+  {"q": "A company tracks likes, comments, and shares online. These are:", "a": "Social Media KPIs", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A startup explains how it will earn money from customers. This is:", "a": "Business Model", "b": "Recruitment", "c": "Forecasting", "d": "Accounting", "e": "Auditing", "ans": "A"},
+  {"q": "A company lists suppliers and distributors in its plan. These are:", "a": "Key Partners", "b": "Revenue Streams", "c": "Channels", "d": "Costs", "e": "Segments", "ans": "A"},
+  {"q": "A startup identifies marketing and delivery tasks. These are:", "a": "Key Activities", "b": "Revenue Streams", "c": "Segments", "d": "Promotions", "e": "Costs", "ans": "A"},
+  {"q": "A business uses employees and technology for operations. These are:", "a": "Key Resources", "b": "Channels", "c": "Promotions", "d": "Costs", "e": "Segments", "ans": "A"},
+  {"q": "A company explains why customers should buy its product. This is:", "a": "Value Proposition", "b": "Recruitment", "c": "Forecasting", "d": "Auditing", "e": "Staffing", "ans": "A"},
+  {"q": "A company uses WhatsApp and websites to communicate with buyers. These are:", "a": "Channels", "b": "Revenue Streams", "c": "Costs", "d": "Segments", "e": "Forecasts", "ans": "A"},
+  {"q": "A startup identifies students as its main customers. These are:", "a": "Customer Segments", "b": "Revenue Streams", "c": "Costs", "d": "Activities", "e": "Promotions", "ans": "A"},
+  {"q": "A company calculates salaries and rent as expenses. This is:", "a": "Cost Structure", "b": "Revenue Stream", "c": "Segmentation", "d": "Branding", "e": "Distribution", "ans": "A"},
+  {"q": "A company earns money through subscriptions and ads. These are:", "a": "Revenue Streams", "b": "Channels", "c": "Costs", "d": "Segments", "e": "Promotions", "ans": "A"},
+  {"q": "A founder gives a short business introduction in networking event. This is:", "a": "Elevator Pitch", "b": "Rocket Pitch", "c": "SWOT", "d": "KPI", "e": "Forecasting", "ans": "A"},
+  {"q": "A startup presents idea to large audience in 5 minutes. This is:", "a": "Rocket Pitch", "b": "Elevator Pitch", "c": "Audit Report", "d": "SEO Plan", "e": "KPI Report", "ans": "A"},
+  {"q": "A startup prepares PowerPoint slides for investors. This is:", "a": "Pitch Deck", "b": "Segmentation", "c": "SWOT", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A presenter tells a story during pitch to engage audience. This improves:", "a": "Audience Engagement", "b": "Forecasting", "c": "Accounting", "d": "Recruitment", "e": "Auditing", "ans": "A"},
+  {"q": "A startup supports claims using research and statistics. This improves:", "a": "Credibility", "b": "Staffing", "c": "Forecasting", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A founder confidently explains future goals to investors. This improves:", "a": "First Impression", "b": "Forecasting", "c": "Recruitment", "d": "Manufacturing", "e": "Accounting", "ans": "A"},
+  {"q": "A company offers 'Buy One Get One Free' deals. This is:", "a": "Promotion", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business collects customer opinions using online surveys. This is:", "a": "Market Research", "b": "Auditing", "c": "Manufacturing", "d": "Forecasting", "e": "Staffing", "ans": "A"},
+  {"q": "A company creates logo and slogan for recognition. This supports:", "a": "Branding", "b": "Forecasting", "c": "Accounting", "d": "Recruitment", "e": "Staffing", "ans": "A"},
+  {"q": "A startup studies total market demand before launch. This is:", "a": "Market Sizing", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A company gives free samples in shopping malls. This is:", "a": "Promotion", "b": "Forecasting", "c": "Auditing", "d": "Recruitment", "e": "Staffing", "ans": "A"},
+  {"q": "A customer buys a product after watching YouTube ad. This is part of:", "a": "Digital Marketing", "b": "Accounting", "c": "Forecasting", "d": "Staffing", "e": "Auditing", "ans": "A"},
+  {"q": "A business measures sales growth after campaign. This is:", "a": "KPI Measurement", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company creates customer groups according to location. This is:", "a": "Segmentation", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A startup explains expected profits to investors. This improves:", "a": "Investor Confidence", "b": "Recruitment", "c": "Forecasting", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A company uses customer testimonials in ads. This improves:", "a": "Trust", "b": "Forecasting", "c": "Auditing", "d": "Staffing", "e": "Recruitment", "ans": "A"},
+  {"q": "A company improves product quality to satisfy buyers. This supports:", "a": "Customer Satisfaction", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business tracks conversion rate from online ads. This measures:", "a": "Campaign Performance", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup changes strategy according to market trends. This reflects:", "a": "Flexibility", "b": "Downsizing", "c": "Forecasting", "d": "Auditing", "e": "Staffing", "ans": "A"},
+  {"q": "A company creates loyalty card program for customers. This improves:", "a": "Customer Retention", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business promotes products during sports events. This is:", "a": "Promotion", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company studies competitors before pricing products. This is:", "a": "Competitor Analysis", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A startup identifies key suppliers before launch. These are:", "a": "Key Partners", "b": "Revenue Streams", "c": "Segments", "d": "Costs", "e": "Promotions", "ans": "A"},
+  {"q": "A company studies opportunities and threats before expansion. This is:", "a": "SWOT Analysis", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A customer purchases product after seeing Instagram ad. This is part of:", "a": "Social Media Marketing", "b": "Forecasting", "c": "Staffing", "d": "Auditing", "e": "Recruitment", "ans": "A"},
+  {"q": "A company sends newsletters to customers through email. This is:", "a": "Email Marketing", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup prepares financial details for investors. This supports:", "a": "Pitch Presentation", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A company improves mobile website design for users. This supports:", "a": "User Experience", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business creates awareness using YouTube ads. This stage is:", "a": "Reach Stage", "b": "Convert Stage", "c": "Engage Stage", "d": "Forecasting", "e": "Staffing", "ans": "A"},
+  {"q": "A company encourages users to interact with online posts. This belongs to:", "a": "Act Stage", "b": "Reach Stage", "c": "Convert Stage", "d": "Forecasting", "e": "Recruitment", "ans": "A"},
+  {"q": "A customer completes online purchase after clicking ad. This stage is:", "a": "Convert Stage", "b": "Reach Stage", "c": "Engage Stage", "d": "Forecasting", "e": "Staffing", "ans": "A"},
+  {"q": "A company sends thank-you emails after purchase. This improves:", "a": "Engagement", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business uses TikTok videos for promotion. This is:", "a": "Video Marketing", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup explains business vision to investors. This improves:", "a": "Investor Interest", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company offers seasonal discounts during Eid. This is:", "a": "Promotion", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A business studies customer complaints to improve service. This supports:", "a": "Customer Satisfaction", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup identifies target customers before launch. This is:", "a": "Market Segmentation", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company tracks online customer behavior using software tools. This is:", "a": "Analytics", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company improves product packaging to attract buyers. This supports:", "a": "Branding", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A startup identifies future market demand before launch. This is:", "a": "Forecasting", "b": "Recruitment", "c": "Staffing", "d": "Auditing", "e": "Accounting", "ans": "A"},
+  {"q": "A company encourages customers to share reviews online. This improves:", "a": "Engagement", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business creates awareness through Facebook ads. This belongs to:", "a": "Reach Stage", "b": "Convert Stage", "c": "Engage Stage", "d": "Forecasting", "e": "Staffing", "ans": "A"},
+  {"q": "A customer clicks online ad and visits website. This stage is:", "a": "Act Stage", "b": "Convert Stage", "c": "Forecasting", "d": "Staffing", "e": "Recruitment", "ans": "A"},
+  {"q": "A company sends loyalty offers to repeat customers. This improves:", "a": "Customer Retention", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A business compares rival advertisements before campaign. This is:", "a": "Competitor Analysis", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup explains market opportunity to investors. This improves:", "a": "Investor Confidence", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A company uses influencers to review products online. This is:", "a": "Influencer Marketing", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company improves SEO to increase website traffic. This supports:", "a": "Search Ranking", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A business tracks ROI after advertising campaign. This measures:", "a": "Profitability", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup identifies online and offline selling methods. These are:", "a": "Channels", "b": "Revenue Streams", "c": "Costs", "d": "Segments", "e": "Promotions", "ans": "A"},
+  {"q": "A company measures customer satisfaction after sales. This supports:", "a": "Engagement", "b": "Forecasting", "c": "Recruitment", "d": "Staffing", "e": "Accounting", "ans": "A"},
+  {"q": "A business creates educational YouTube videos for customers. This is:", "a": "Content Marketing", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup explains break-even point to investors. This improves:", "a": "Financial Attractiveness", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company studies customer needs before product launch. This is:", "a": "Need Analysis", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company improves website design to increase purchases. This supports:", "a": "CRO", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A business measures customer engagement through likes and comments. These are:", "a": "KPIs", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup explains competitive advantage during pitch. This improves:", "a": "Differentiation", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company promotes products using blogs and articles. This is:", "a": "Content Marketing", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A business targets previous visitors with online ads. This is:", "a": "Remarketing", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A startup clearly explains goals and vision to investors. This improves:", "a": "Pitch Effectiveness", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"},
+  {"q": "A company creates customer-focused strategy before marketing. This reflects:", "a": "Customer Focus", "b": "Forecasting", "c": "Staffing", "d": "Recruitment", "e": "Accounting", "ans": "A"}
+]
+
+// State
+let displayed = []; // indices into ALL_MCQS currently shown
+let order = []; // current display order
+let answered = {}; // key: original index, val: 'correct'|'wrong'
+let isDark = true;
+
+function shuffleArr(arr) {
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function init() {
+  order = ALL_MCQS.map((_,i)=>i);
+  displayed = [...order];
+  renderCards(displayed);
+  updateScore();
+  setTimeout(()=>{
+    document.getElementById('loading').style.opacity='0';
+    setTimeout(()=>document.getElementById('loading').style.display='none',400);
+  },1200);
+}
+
+function renderCards(idxList) {
+  const container = document.getElementById('quiz-container');
+  const noRes = document.getElementById('no-results');
+  // Do NOT update filter count here – we'll do that elsewhere
+  if (!idxList.length) {
+    container.innerHTML = '';
+    noRes.style.display = 'block';
+    return;
+  }
+  noRes.style.display = 'none';
+  container.innerHTML = idxList.map((origIdx, displayNum) => buildCard(origIdx, displayNum + 1)).join('');
+}
+function updateFilterCountDisplay() {
+  document.getElementById('filter-count').textContent = `${displayed.length} / ${ALL_MCQS.length}`;
+}
+
+function buildCard(idx, num) {
+  const m = ALL_MCQS[idx];
+  const ans = answered[idx];
+  const letters = ['A','B','C','D','E'];
+  const opts = [m.a,m.b,m.c,m.d,m.e];
+  const correctLetter = m.ans;
+  
+  let optHtml = opts.map((txt,i)=>{
+    const letter = letters[i];
+    let cls='opt';
+    let icon='';
+    if(ans) {
+      cls += ' disabled';
+      if(letter===correctLetter){ cls+=' correct'; icon='<span class="opt-icon">✓</span>'; }
+      else if(letter===ans){ cls+=' wrong'; icon='<span class="opt-icon">✗</span>'; }
+    }
+    const clickHandler = ans ? '' : `onclick="selectAnswer(${idx},'${letter}')"`;
+    return `<div class="${cls}" ${clickHandler}>
+      <div class="opt-letter">${letter}</div>
+      <div class="opt-text">${txt}</div>
+      ${icon}
+    </div>`;
+  }).join('');
+
+  const revealVis = ans ? 'display:none' : '';
+  const answerRevealDisplay = '';
+  
+  return `<div class="mcq-card" id="card-${idx}" style="animation-delay:${(num-1)*0.03}s">
+    <div class="q-num">Q${String(num).padStart(3,'0')}</div>
+    <div class="q-text">${m.q}</div>
+    <div class="options">${optHtml}</div>
+    <div class="card-footer">
+      <button class="reveal-btn" id="reveal-btn-${idx}" onclick="toggleReveal(${idx})">👁 Tap to See Answer</button>
+    </div>
+    <div class="answer-reveal" id="reveal-${idx}">
+      ✅ Correct Answer: <strong>${correctLetter}</strong> — ${opts[letters.indexOf(correctLetter)]}
+    </div>
+  </div>`;
+}
+
+function selectAnswer(idx, chosen) {
+  if(answered[idx]) return;
+  const m = ALL_MCQS[idx];
+  const isCorrect = chosen === m.ans;
+  answered[idx] = chosen;
+  
+  // Update card DOM
+  const card = document.getElementById('card-'+idx);
+  if(!card) return;
+  const letters = ['A','B','C','D','E'];
+  const opts = card.querySelectorAll('.opt');
+  opts.forEach((el,i)=>{
+    el.classList.add('disabled');
+    el.removeAttribute('onclick');
+    if(letters[i]===m.ans){ el.classList.add('correct'); el.insertAdjacentHTML('beforeend','<span class="opt-icon">✓</span>'); }
+    else if(letters[i]===chosen && !isCorrect){ el.classList.add('wrong'); el.insertAdjacentHTML('beforeend','<span class="opt-icon">✗</span>'); }
+  });
+
+  updateScore();
+  if(isCorrect) { celebrate(card); playSound(true); }
+  else { playSound(false); }
+}
+
+function toggleReveal(idx) {
+  const el = document.getElementById('reveal-'+idx);
+  const btn = document.getElementById('reveal-btn-'+idx);
+  if(el.style.display==='block'){el.style.display='none';btn.textContent='👁 Tap to See Answer';}
+  else{el.style.display='block';btn.textContent='🙈 Hide Answer';}
+}
+
+function updateScore() {
+  const total = Object.keys(answered).length;
+  const correct = Object.values(answered).filter((v,k)=>{
+    const keys=Object.keys(answered);
+    return ALL_MCQS[keys[Object.values(answered).indexOf(v)]].ans===v;
+  }).length;
+  // recalc properly
+  let c=0,w=0;
+  for(const [idx,chosen] of Object.entries(answered)){
+    if(ALL_MCQS[idx].ans===chosen) c++; else w++;
+  }
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-correct').textContent=c;
+  document.getElementById('s-wrong').textContent=w;
+  const pct=total?Math.round(c/total*100):0;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('progress-bar').style.width=(total/ALL_MCQS.length*100)+'%';
+}
+
+function celebrate(card) {
+  const cel = document.getElementById('celebration');
+  cel.style.display='block';
+  cel.innerHTML='';
+  const colors=['#00d4ff','#7b2fff','#ff2d78','#00ff88','#ffdd00'];
+  for(let i=0;i<50;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${colors[i%colors.length]};
+      width:${Math.random()*10+5}px;height:${Math.random()*10+5}px;
+      animation-delay:${Math.random()*0.5}s;animation-duration:${Math.random()*1+1}s;
+      border-radius:${Math.random()>0.5?'50%':'2px'};`;
+    cel.appendChild(p);
+  }
+  const emojis=['🎉','⭐','🔥','✨','🎊','💥'];
+  const rect=card.getBoundingClientRect();
+  emojis.forEach((em,i)=>{
+    const span=document.createElement('div');
+    span.className='emoji-burst';
+    span.textContent=em;
+    span.style.left=(rect.left+rect.width/2+Math.random()*100-50)+'px';
+    span.style.top=(rect.top+Math.random()*50)+'px';
+    span.style.animationDelay=(i*0.1)+'s';
+    document.body.appendChild(span);
+    setTimeout(()=>span.remove(),1500);
+  });
+  setTimeout(()=>{cel.style.display='none';cel.innerHTML=''},2000);
+}
+
+// Sound
+const AudioCtx = window.AudioContext||window.webkitAudioContext;
+let actx;
+function getACtx(){if(!actx)actx=new AudioCtx();return actx;}
+function playSound(correct){
+  try{
+    const ctx=getACtx();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    if(correct){
+      osc.frequency.setValueAtTime(523,ctx.currentTime);
+      osc.frequency.setValueAtTime(659,ctx.currentTime+0.1);
+      osc.frequency.setValueAtTime(784,ctx.currentTime+0.2);
+      gain.gain.setValueAtTime(0.2,ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.5);
+      osc.start();osc.stop(ctx.currentTime+0.5);
+    }else{
+      osc.frequency.setValueAtTime(300,ctx.currentTime);
+      osc.frequency.setValueAtTime(200,ctx.currentTime+0.15);
+      gain.gain.setValueAtTime(0.2,ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4);
+      osc.start();osc.stop(ctx.currentTime+0.4);
+    }
+  }catch(e){}
+}
+
+function filterMCQs(query) {
+  const q=query.toLowerCase().trim();
+  if(!q){ displayed=[...order]; renderCards(displayed); return; }
+  displayed = order.filter(i=>ALL_MCQS[i].q.toLowerCase().includes(q)||
+    ALL_MCQS[i].a.toLowerCase().includes(q)||ALL_MCQS[i].b.toLowerCase().includes(q));
+  renderCards(displayed);
+}
+
+function shuffleQuiz(){
+  shuffleArr(order);
+  displayed=[...order];
+  const search=document.getElementById('search-bar').value;
+  if(search)filterMCQs(search);
+  else renderCards(displayed);
+  // animate
+  document.getElementById('quiz-container').style.opacity='0';
+  setTimeout(()=>document.getElementById('quiz-container').style.opacity='1',300);
+}
+
+function resetQuiz(){
+  if(!confirm('Reset all answers and progress?'))return;
+  answered={};
+  order=ALL_MCQS.map((_,i)=>i);
+  displayed=[...order];
+  document.getElementById('search-bar').value='';
+  updateScore();
+  renderCards(displayed);
+}
+
+// Toggle show/hide all answers
+let allAnswersVisible = false;
+
+function toggleAllAnswers() {
+  const cards = document.querySelectorAll('.mcq-card');
+  const btn = document.getElementById('toggleAnswersBtn');
+  
+  if (!allAnswersVisible) {
+    // Show all answers
+    cards.forEach(card => {
+      const idMatch = card.id.match(/card-(\d+)/);
+      if (idMatch) {
+        const idx = idMatch[1];
+        const revealDiv = document.getElementById(`reveal-${idx}`);
+        const revealBtn = document.getElementById(`reveal-btn-${idx}`);
+        if (revealDiv && revealDiv.style.display !== 'block') {
+          revealDiv.style.display = 'block';
+          if (revealBtn) revealBtn.textContent = '🙈 Hide Answer';
+        }
+      }
+    });
+    btn.innerHTML = '🙈 Hide All Answers';
+    allAnswersVisible = true;
+  } else {
+    // Hide all answers
+    cards.forEach(card => {
+      const idMatch = card.id.match(/card-(\d+)/);
+      if (idMatch) {
+        const idx = idMatch[1];
+        const revealDiv = document.getElementById(`reveal-${idx}`);
+        const revealBtn = document.getElementById(`reveal-btn-${idx}`);
+        if (revealDiv && revealDiv.style.display === 'block') {
+          revealDiv.style.display = 'none';
+          if (revealBtn) revealBtn.textContent = '👁 Tap to See Answer';
+        }
+      }
+    });
+    btn.innerHTML = '🔍 Show All Answers';
+    allAnswersVisible = false;
+  }
+}
+function toggleTheme(){
+  isDark=!isDark;
+  document.documentElement.classList.toggle('light',!isDark);
+  document.body.classList.toggle('light',!isDark);
+  document.getElementById('theme-btn').textContent=isDark?'🌙':'☀️';
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('quiz-container').style.display=tab==='quiz'?'block':'none';
+  document.getElementById('no-results').style.display='none';
+  document.getElementById('cheatsheet').style.display=tab==='cheatsheet'?'block':'none';
+}
+
+function toggleCheatsheet(){
+  const cs=document.getElementById('cheatsheet');
+  cs.style.display=cs.style.display==='block'?'none':'block';
+  if(cs.style.display==='block')cs.scrollIntoView({behavior:'smooth'});
+}
+
+// ========== WRONG‑ANSWER FILTER FEATURE ==========
+let wrongFilterActive = false;
+
+// Pagination
+const ITEMS_PER_PAGE = 90 ;          // 44 MCQs → 6 pages (8,8,8,8,8,4)
+let currentPage = 1;
+let totalPages = 1;
+
+function applyWrongFilter() {
+  if (!wrongFilterActive) return;
+  // show only questions that have been answered AND are incorrect
+  const wrongIndices = order.filter(i => answered[i] && ALL_MCQS[i].ans !== answered[i]);
+  displayed = wrongIndices;
+  renderCards(displayed);
+}
+
+function toggleWrongFilter() {
+  const btn = document.getElementById('wrongFilterBtn');
+  if (!wrongFilterActive) {
+    // activate wrong filter
+    wrongFilterActive = true;
+    btn.classList.add('wrong-filter-active');
+    applyWrongFilter();
+  } else {
+    // deactivate -> restore normal view based on current search
+    wrongFilterActive = false;
+    btn.classList.remove('wrong-filter-active');
+    const searchVal = document.getElementById('search-bar').value;
+    if (searchVal.trim()) {
+      filterMCQs(searchVal);
+    } else {
+      displayed = [...order];
+      renderCards(displayed);
+    }
+  }
+}
+
+// Override filterMCQs to respect wrong filter if active
+const originalFilterMCQs = filterMCQs;
+filterMCQs = function(query) {
+  const q = query.toLowerCase().trim();
+  let baseFiltered = order;
+  if (q) {
+    baseFiltered = order.filter(i => 
+      ALL_MCQS[i].q.toLowerCase().includes(q) ||
+      ALL_MCQS[i].a.toLowerCase().includes(q) ||
+      ALL_MCQS[i].b.toLowerCase().includes(q)
+    );
+  }
+  if (wrongFilterActive) {
+    baseFiltered = baseFiltered.filter(i => answered[i] && ALL_MCQS[i].ans !== answered[i]);
+  }
+  displayed = baseFiltered;
+  renderCards(displayed);
+};
+
+// Override shuffleQuiz to keep wrong filter if active
+const originalShuffleQuiz = shuffleQuiz;
+shuffleQuiz = function() {
+  shuffleArr(order);
+  if (wrongFilterActive) {
+    applyWrongFilter();
+  } else {
+    displayed = [...order];
+    const searchVal = document.getElementById('search-bar').value;
+    if (searchVal) filterMCQs(searchVal);
+    else renderCards(displayed);
+  }
+  document.getElementById('quiz-container').style.opacity = '0';
+  setTimeout(() => document.getElementById('quiz-container').style.opacity = '1', 300);
+};
+
+// Override resetQuiz to clear wrong filter state
+const originalResetQuiz = resetQuiz;
+resetQuiz = function() {
+  if (!confirm('Reset all answers and progress?')) return;
+  answered = {};
+  order = ALL_MCQS.map((_, i) => i);
+  displayed = [...order];
+  document.getElementById('search-bar').value = '';
+  // turn off wrong filter if active
+  if (wrongFilterActive) {
+    wrongFilterActive = false;
+    document.getElementById('wrongFilterBtn').classList.remove('wrong-filter-active');
+  }
+  updateScore();
+  renderCards(displayed);
+};
+
+// Helper: Scroll smoothly to the next MCQ in the current filtered view
+function scrollToNextMCQ(currentOrigIdx) {
+  // Find position of current question in the displayed list
+  const pos = displayed.indexOf(currentOrigIdx);
+  if (pos === -1) return;
+  const nextPos = pos + 1;
+  if (nextPos >= displayed.length) return; // No next question
+  
+  const nextOrigIdx = displayed[nextPos];
+  const nextCard = document.getElementById(`card-${nextOrigIdx}`);
+  if (nextCard) {
+    nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Optional: add a subtle highlight effect to draw attention
+    nextCard.style.transition = 'box-shadow 0.2s';
+    nextCard.style.boxShadow = '0 0 0 2px var(--neon), var(--glow)';
+    setTimeout(() => {
+      nextCard.style.boxShadow = '';
+    }, 800);
+  }
+}
+
+
+// Compute total pages based on the current filtered list (displayed)
+function updateTotalPages() {
+  totalPages = Math.ceil(displayed.length / ITEMS_PER_PAGE);
+  if (totalPages === 0) totalPages = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+}
+
+// Get the slice of indices for the current page
+function getCurrentPageSlice() {
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  return displayed.slice(start, end);
+}
+
+// Render the current page using the slice, and update pagination controls
+function renderCurrentPage() {
+  const slice = getCurrentPageSlice();
+  renderCards(slice);                       // render only this page's questions
+  updatePaginationControls();               // update buttons & page indicator
+}
+
+// Update Prev/Next button states and page indicator text
+function updatePaginationControls() {
+  const prevBtn = document.getElementById('prev-page-btn');
+  const nextBtn = document.getElementById('next-page-btn');
+  const pageIndicator = document.getElementById('page-indicator');
+  if (prevBtn) prevBtn.disabled = (currentPage === 1);
+  if (nextBtn) nextBtn.disabled = (currentPage === totalPages);
+  if (pageIndicator) {
+    pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+  }
+}
+
+// Go to a specific page (with optional card index to scroll to after render)
+function goToPage(page, scrollToOrigIdx = null) {
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  renderCurrentPage();
+  if (scrollToOrigIdx !== null) {
+    // After render, scroll to the card with the given original index
+    setTimeout(() => {
+      const card = document.getElementById(`card-${scrollToOrigIdx}`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
+  }
+}
+
+
+// Override selectAnswer to refresh wrong filter when needed
+const originalSelectAnswer = selectAnswer;
+selectAnswer = function(idx, chosen) {
+  if (answered[idx]) return;
+  const m = ALL_MCQS[idx];
+  const isCorrect = chosen === m.ans;
+  answered[idx] = chosen;
+  
+  const card = document.getElementById('card-' + idx);
+  if (card) {
+    const letters = ['A','B','C','D','E'];
+    const opts = card.querySelectorAll('.opt');
+    opts.forEach((el, i) => {
+      el.classList.add('disabled');
+      el.removeAttribute('onclick');
+      if (letters[i] === m.ans) {
+        el.classList.add('correct');
+        el.insertAdjacentHTML('beforeend', '<span class="opt-icon">✓</span>');
+      } else if (letters[i] === chosen && !isCorrect) {
+        el.classList.add('wrong');
+        el.insertAdjacentHTML('beforeend', '<span class="opt-icon">✗</span>');
+      }
+    });
+  }
+  updateScore();
+  
+  if (isCorrect) { 
+    celebrate(card); 
+    playSound(true);
+    
+    // *** NEW: scroll to next MCQ after correct answer ***
+    // Use a short delay to let any re-renders (e.g., wrong filter) complete
+    setTimeout(() => {
+      scrollToNextMCQ(idx);
+    }, 100);
+  } else { 
+    playSound(false); 
+  }
+  
+  // If wrong filter is active, refresh the displayed list
+  if (wrongFilterActive) {
+    applyWrongFilter();
+  }
+};
+window.onload=()=>init();
+</script>
+</body>
+</html>
